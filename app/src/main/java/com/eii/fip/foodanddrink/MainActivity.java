@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Criteria;
@@ -145,7 +146,8 @@ public class MainActivity extends Activity {
 
     public void BtnFaim_OnClick(View v)
     {
-        ShowMessageBox("T'as qu'a manger une pute!!!");
+        Intent intent = new Intent(MainActivity.this, ContactListActivity.class);
+        startActivity(intent);
     }
     public void BtnSoif_OnClick(View v)
     {
