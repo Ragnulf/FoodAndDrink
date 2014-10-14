@@ -6,11 +6,48 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#ffffec4e"
+    android:id="@+id/MainFrame">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/LinearMainLayout"
+        android:focusable="false">
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:text="New Button"
+            android:id="@+id/Btn_Faim"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:text="New Button"
+            android:id="@+id/Btn_Soif"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="141dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Coordonnées GPS:"
+            android:id="@+id/txt_titre_coo_gps" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="xyz"
+            android:id="@+id/Txt_Local_GPS" />
+
+
+    </LinearLayout>
 </RelativeLayout>
