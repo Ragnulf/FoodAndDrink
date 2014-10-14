@@ -2,27 +2,34 @@
 package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Message;
+import android.provider.ContactsContract;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.app.AlertDialog;
 import android.widget.TextView;
-
+import android.provider.Contacts;
 import java.io.IOException;
+import android.net.Uri;
+import java.security.Provider;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 
 public class MainActivity extends Activity {
 
@@ -57,13 +64,12 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
     private void LinkInterface()
     {
         btn_Faim = (Button)findViewById(R.id.Btn_Faim);
         btn_Soif= (Button)findViewById(R.id.Btn_Soif);
         txt_GpsLocation = (TextView)findViewById(R.id.Txt_Local_GPS);
+
     }
 
     public void CreateInterface()
@@ -121,6 +127,7 @@ public class MainActivity extends Activity {
     private void updateWithNewLocation(Location l)
     {
         String latLongString = "Aucun Emplacement trouvé";
+
         if(l != null)
         {
             double lat = l.getLatitude();
@@ -130,6 +137,7 @@ public class MainActivity extends Activity {
             latLongString = "Latitude:" + lat + "\nLongitude:" +lng + "\nAltitude:" + alt;
 
 
+
         }
         txt_GpsLocation.setText( latLongString);
 
@@ -137,25 +145,51 @@ public class MainActivity extends Activity {
 
     public void BtnFaim_OnClick(View v)
     {
-        AlertDialog alertDialog;
-        alertDialog = new AlertDialog.Builder((Context)this).create();
-        alertDialog.setTitle("WTF");
-        alertDialog.setMessage("T'as qu'a manger une pute!!!");
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDialog.show();
-
+        ShowMessageBox("T'as qu'a manger une pute!!!");
     }
     public void BtnSoif_OnClick(View v)
     {
+        ShowMessageBox("La biere est dans le Frigo!!");
+
+        //String num = "0659496010";
+        String msg = "J'ai Soif!!  Message envoyé via FoodandDrink";
+        String num="";
+
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        String[] projection    = new String[] {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER};
+
+        Cursor people = getContentResolver().query(uri, projection, null, null, null);
+
+        int indexName = people.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+        int indexNumber = people.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+        people.moveToFirst();
+        do {
+            String name   = people.getString(indexName);
+            String number = people.getString(indexNumber);
+            if(name.equals("Houpert Nicolas"))
+                num=number;
+        } while (people.moveToNext());
+
+        if(num.length()>= 4 && msg.length() > 0){
+            //Grâce à l'objet de gestion de SMS (SmsManager) que l'on récupère grâce à la méthode static getDefault()
+            //On envoit le SMS à l'aide de la méthode sendTextMessage
+            SmsManager.getDefault().sendTextMessage(num, null, msg, null, null);
+        }else{
+            //On affiche un petit message d'erreur dans un Toast
+            ShowMessageBox("erreur");
+        }
+
+
+    }
+
+    public void ShowMessageBox(String Msg)
+    {
         AlertDialog alertDialog;
         alertDialog = new AlertDialog.Builder((Context)this).create();
-        alertDialog.setTitle("WTF");
-        alertDialog.setMessage("La biere est dans le Frigo!!");
+        alertDialog.setTitle("Info");
+        alertDialog.setMessage(Msg);
         alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
