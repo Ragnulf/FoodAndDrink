@@ -172,8 +172,9 @@ public class MainActivity extends Activity {
                 num=number;
 
         } while (people.moveToNext());
-
+//Partie qui envoi le SMS
         if(num.length()>= 4 && msg.length() > 0){
+
             //Grâce à l'objet de gestion de SMS (SmsManager) que l'on récupère grâce à la méthode static getDefault()
             //On envoit le SMS à l'aide de la méthode sendTextMessage
             SmsManager.getDefault().sendTextMessage(num, null, msg, null, null);
