@@ -170,6 +170,7 @@ public class MainActivity extends Activity {
             String number = people.getString(indexNumber);
             if(name.equals("Houpert Nicolas"))
                 num=number;
+
         } while (people.moveToNext());
 
         if(num.length()>= 4 && msg.length() > 0){
