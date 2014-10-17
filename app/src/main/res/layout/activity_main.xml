@@ -9,6 +9,7 @@
     tools:context=".MainActivity"
     android:background="#ffffec4e"
     android:id="@+id/MainFrame"
+
     >
 
     <LinearLayout
