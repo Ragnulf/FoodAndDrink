@@ -55,7 +55,8 @@
             android:text="New Button"
             android:id="@+id/TestButton1"
             android:layout_gravity="right"
-            android:clickable="true" />
+            android:clickable="true"
+            android:visibility="invisible" />
 
 
     </LinearLayout>
