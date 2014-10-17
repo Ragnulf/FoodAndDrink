@@ -1,11 +1,14 @@
 
 package com.eii.fip.foodanddrink;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Criteria;
@@ -18,6 +21,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,27 +29,36 @@ import android.widget.Button;
 import android.app.AlertDialog;
 import android.widget.TextView;
 import android.provider.Contacts;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 import android.net.Uri;
 import java.security.Provider;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 
 public class MainActivity extends Activity {
 
     //Declaration des objets graphiques
     private Button btn_Faim;
     private Button btn_Soif;
+    private Button btn_test1;
     private TextView txt_GpsLocation;
+    public static final String PREFS_NAME = "DataContainerPref";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DataContainer.getInstance().setSetting( getSharedPreferences(PREFS_NAME, 0));
         LinkInterface();
         CreateInterface();
         GetGpsPosition();
-    }
+        DataContainer.getInstance().LoadDataContainer();
+   }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -70,11 +83,13 @@ public class MainActivity extends Activity {
         btn_Faim = (Button)findViewById(R.id.Btn_Faim);
         btn_Soif= (Button)findViewById(R.id.Btn_Soif);
         txt_GpsLocation = (TextView)findViewById(R.id.Txt_Local_GPS);
+        btn_test1 = (Button)findViewById(R.id.TestButton1);
 
     }
 
     public void CreateInterface()
     {
+       // DataContainer.getInstance().CustomListChecked = ;
         btn_Faim.setText("J'ai Faim");
         btn_Soif.setText("J'ai Soif");
         btn_Faim.setOnClickListener(new Button.OnClickListener(){
@@ -85,11 +100,15 @@ public class MainActivity extends Activity {
                 BtnSoif_OnClick(view);
             }
         });
+        btn_test1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DataContainer.getInstance().LoadDataContainer();
+            }
+        });
 
 
     }
-
-
     //Récuperation de la position GPS
     public void GetGpsPosition()
     {
@@ -143,51 +162,20 @@ public class MainActivity extends Activity {
         txt_GpsLocation.setText( latLongString);
 
     }
-
     public void BtnFaim_OnClick(View v)
     {
-        Intent intent = new Intent(MainActivity.this, ContactListActivity.class);
+        DataContainer.getInstance().MessageToSend = "J'ai Faim!!  Message envoyé via FoodandDrink";
+        Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
         startActivity(intent);
     }
     public void BtnSoif_OnClick(View v)
     {
-        ShowMessageBox("La biere est dans le Frigo!!");
-
-        //String num = "0659496010";
-        String msg = "J'ai Soif!!  Message envoyé via FoodandDrink";
-        String num="";
-
-        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection    = new String[] {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Phone.NUMBER};
-
-        Cursor people = getContentResolver().query(uri, projection, null, null, null);
-
-        int indexName = people.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-        int indexNumber = people.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-
-        people.moveToFirst();
-        do {
-            String name   = people.getString(indexName);
-            String number = people.getString(indexNumber);
-            if(name.equals("Houpert Nicolas"))
-                num=number;
-
-        } while (people.moveToNext());
-//Partie qui envoi le SMS
-        if(num.length()>= 4 && msg.length() > 0){
-
-            //Grâce à l'objet de gestion de SMS (SmsManager) que l'on récupère grâce à la méthode static getDefault()
-            //On envoit le SMS à l'aide de la méthode sendTextMessage
-            SmsManager.getDefault().sendTextMessage(num, null, msg, null, null);
-        }else{
-            //On affiche un petit message d'erreur dans un Toast
-            ShowMessageBox("erreur");
-        }
+        DataContainer.getInstance().MessageToSend = "J'ai Soif!!  Message envoyé via FoodandDrink";
+        Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
+        startActivity(intent);
 
 
     }
-
     public void ShowMessageBox(String Msg)
     {
         AlertDialog alertDialog;
@@ -203,4 +191,5 @@ public class MainActivity extends Activity {
         alertDialog.show();
 
     }
+
 }

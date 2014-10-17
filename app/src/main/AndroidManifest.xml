@@ -20,6 +20,10 @@
             android:name=".ContactListActivity"
             android:label="@string/title_activity_contact_list" >
         </activity>
+        <activity
+            android:name=".SendSmsActivity"
+            android:label="@string/title_activity_send_sms" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

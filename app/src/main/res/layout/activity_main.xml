@@ -8,7 +8,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity"
     android:background="#ffffec4e"
-    android:id="@+id/MainFrame">
+    android:id="@+id/MainFrame"
+    >
 
     <LinearLayout
         android:orientation="vertical"
@@ -47,6 +48,14 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="xyz"
             android:id="@+id/Txt_Local_GPS" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/TestButton1"
+            android:layout_gravity="right"
+            android:clickable="true" />
 
 
     </LinearLayout>
