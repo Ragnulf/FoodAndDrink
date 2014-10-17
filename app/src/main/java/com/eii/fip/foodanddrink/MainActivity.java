@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,12 +49,14 @@ public class MainActivity extends Activity {
     private Button btn_test1;
     private TextView txt_GpsLocation;
     public static final String PREFS_NAME = "DataContainerPref";
+    private boolean bIsPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DataContainer.getInstance().setSetting( getSharedPreferences(PREFS_NAME, 0));
+        bIsPhone=IsDeviceSmartphone();
         LinkInterface();
         CreateInterface();
         GetGpsPosition();
@@ -164,16 +167,29 @@ public class MainActivity extends Activity {
     }
     public void BtnFaim_OnClick(View v)
     {
+        if(bIsPhone)
+        {
         DataContainer.getInstance().MessageToSend = "J'ai Faim!!  Message envoyé via FoodandDrink";
         Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
         startActivity(intent);
+        }
+        else
+        {
+            ShowMessageBox("Fonction désactivé sur Tablette");
+        }
     }
     public void BtnSoif_OnClick(View v)
     {
-        DataContainer.getInstance().MessageToSend = "J'ai Soif!!  Message envoyé via FoodandDrink";
-        Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
-        startActivity(intent);
-
+        if(bIsPhone)
+        {
+            DataContainer.getInstance().MessageToSend = "J'ai Soif!!  Message envoyé via FoodandDrink";
+            Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            ShowMessageBox("Fonction désactivé sur Tablette");
+        }
 
     }
     public void ShowMessageBox(String Msg)
@@ -189,6 +205,17 @@ public class MainActivity extends Activity {
             }
         });
         alertDialog.show();
+
+    }
+
+    private boolean IsDeviceSmartphone()
+    {
+        TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        if(manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE){
+            return false;
+        }else{
+            return true;
+        }
 
     }
 
