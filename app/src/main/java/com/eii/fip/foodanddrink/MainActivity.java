@@ -49,14 +49,14 @@ public class MainActivity extends Activity {
     private Button btn_test1;
     private TextView txt_GpsLocation;
     public static final String PREFS_NAME = "DataContainerPref";
-    private boolean bIsPhone;
+    //private boolean bIsPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DataContainer.getInstance().setSetting( getSharedPreferences(PREFS_NAME, 0));
-        bIsPhone=IsDeviceSmartphone();
+        DataContainer.getInstance().bDeviceIsPhone=IsDeviceSmartphone();
         LinkInterface();
         CreateInterface();
         GetGpsPosition();
@@ -167,29 +167,19 @@ public class MainActivity extends Activity {
     }
     public void BtnFaim_OnClick(View v)
     {
-        if(bIsPhone)
-        {
+
         DataContainer.getInstance().MessageToSend = "J'ai Faim!!  Message envoyé via FoodandDrink";
         Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
         startActivity(intent);
-        }
-        else
-        {
-            ShowMessageBox("Fonction désactivé sur Tablette");
-        }
+
+
     }
     public void BtnSoif_OnClick(View v)
     {
-        if(bIsPhone)
-        {
+
             DataContainer.getInstance().MessageToSend = "J'ai Soif!!  Message envoyé via FoodandDrink";
             Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
             startActivity(intent);
-        }
-        else
-        {
-            ShowMessageBox("Fonction désactivé sur Tablette");
-        }
 
     }
     public void ShowMessageBox(String Msg)

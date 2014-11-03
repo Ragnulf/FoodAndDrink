@@ -2,6 +2,7 @@ package com.eii.fip.foodanddrink;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.telephony.TelephonyManager;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class DataContainer {
     public List<String> CustomList =new ArrayList<String>();;
     public List<String> CustomListChecked = new ArrayList<String>();
     public String MessageToSend = "";
+    public boolean bDeviceIsPhone = false;
+
 
     public void setSetting(SharedPreferences set)
 {

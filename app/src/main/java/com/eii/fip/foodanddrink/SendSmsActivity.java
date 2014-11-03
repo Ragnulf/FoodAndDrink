@@ -97,16 +97,21 @@ public class SendSmsActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                int temp = DataContainer.getInstance().CustomListChecked.size();
-                for(int i=0;i<temp;i++)
-                {
-                    sendSms(DataContainer.getInstance().MessageToSend,DataContainer.getInstance().CustomListChecked.get(i));
+                if(DataContainer.getInstance().bDeviceIsPhone) {
+                    int temp = DataContainer.getInstance().CustomListChecked.size();
+                    for (int i = 0; i < temp; i++) {
+                        sendSms(DataContainer.getInstance().MessageToSend, DataContainer.getInstance().CustomListChecked.get(i));
+                    }
+                    if (temp > 1)
+                        ShowMessageBox("Messages envoyés");
+                    else if (temp == 1)
+                        ShowMessageBox("Message envoyé");
+                    else ;
                 }
-                if(temp>1)
-                ShowMessageBox("Messages envoyés");
-                else if(temp==1)
-                ShowMessageBox("Message envoyé");
-                else ;
+                else
+                {
+                    ShowMessageBox("Fonction désactivé sur Tablette");
+                }
             }
         });
 
