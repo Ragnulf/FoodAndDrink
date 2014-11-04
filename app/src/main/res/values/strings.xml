@@ -7,5 +7,6 @@
     <string name="title_activity_contact_list">ContactListActivity</string>
     <string name="title_activity_action_send_sms">ActionSendSMS</string>
     <string name="title_activity_send_sms">SendSmsActivity</string>
+    <string name="title_activity_found_result">FoundResultActivity</string>
 
 </resources>

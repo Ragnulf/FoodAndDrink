@@ -36,19 +36,7 @@
             android:id="@+id/Btn_Soif"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
-            android:layout_width="141dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Coordonnées GPS:"
-            android:id="@+id/txt_titre_coo_gps" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="xyz"
-            android:id="@+id/Txt_Local_GPS" />
 
         <Button
             android:layout_width="wrap_content"

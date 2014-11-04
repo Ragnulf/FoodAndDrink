@@ -1,6 +1,8 @@
 package com.eii.fip.foodanddrink;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 
@@ -14,6 +16,8 @@ import java.util.List;
  * Created by jonathan on 16/10/14.
  */
 public class DataContainer {
+
+    private static String GoogleAPIKEY = "AIzaSyA5FW8wnYDr_D4ddJyVDcWnLAGhfx3ykP8";
 
 
 
@@ -34,7 +38,6 @@ public class DataContainer {
 {
     settings = set;
 }
-
     public String  getCustomListString()
     {
         StringBuilder sb = new StringBuilder();
@@ -71,7 +74,6 @@ public class DataContainer {
         }
         Collections.sort(CustomListChecked);
     }
-
     public static final String PREFS_NAME = "DataContainerPref";
     public void   LoadDataContainer()
     {
@@ -87,6 +89,7 @@ public class DataContainer {
         editor.putString("CustomListChecked",DataContainer.getInstance().getCustomListCheckedString());
         editor.commit();
     }
+
 
 
 

@@ -47,20 +47,27 @@ public class MainActivity extends Activity {
     private Button btn_Faim;
     private Button btn_Soif;
     private Button btn_test1;
-    private TextView txt_GpsLocation;
+
     public static final String PREFS_NAME = "DataContainerPref";
-    //private boolean bIsPhone;
+
+    ///Declaration du DataContainer
+    private DataContainer pDataContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DataContainer.getInstance().setSetting( getSharedPreferences(PREFS_NAME, 0));
-        DataContainer.getInstance().bDeviceIsPhone=IsDeviceSmartphone();
+        //Initialisation du DataContainer
+        pDataContainer = DataContainer.getInstance();
+        pDataContainer.setSetting(getSharedPreferences(PREFS_NAME, 0));
+        pDataContainer.bDeviceIsPhone=IsDeviceSmartphone();
+        pDataContainer.LoadDataContainer();
+        //Liaison de l'interface
         LinkInterface();
+        //Creation de l'interface
         CreateInterface();
-        GetGpsPosition();
-        DataContainer.getInstance().LoadDataContainer();
+
+
    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,16 +87,19 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Link les interfaceXML                                                            \\\
+    ///------------------------------------------------------------------------------------------\\\
     private void LinkInterface()
     {
         btn_Faim = (Button)findViewById(R.id.Btn_Faim);
         btn_Soif= (Button)findViewById(R.id.Btn_Soif);
-        txt_GpsLocation = (TextView)findViewById(R.id.Txt_Local_GPS);
         btn_test1 = (Button)findViewById(R.id.TestButton1);
 
     }
-
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Cree l'interface                                                                 \\\
+    ///------------------------------------------------------------------------------------------\\\
     public void CreateInterface()
     {
        // DataContainer.getInstance().CustomListChecked = ;
@@ -106,95 +116,35 @@ public class MainActivity extends Activity {
         btn_test1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataContainer.getInstance().LoadDataContainer();
+                Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
+                startActivity(intent);
             }
         });
+        btn_test1.setVisibility(View.VISIBLE);
 
 
     }
-    //Récuperation de la position GPS
-    public void GetGpsPosition()
-    {
-        LocationManager locationManager;
-        String svcName = Context.LOCATION_SERVICE;
-        locationManager = (LocationManager)getSystemService(svcName);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);;
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setSpeedRequired(false);
-        criteria.setCostAllowed(true);
 
 
-        String provider1 = locationManager.getBestProvider(criteria, true);
-        Location l = locationManager.getLastKnownLocation(provider1);
-
-        updateWithNewLocation(l);
-
-        locationManager.requestLocationUpdates(provider1, 1000, 10, locationListener);
-
-
-
-    }
-    private final LocationListener locationListener = new LocationListener()
-    {
-        public void onLocationChanged(Location location) {
-            updateWithNewLocation(location);
-        }
-        public void onProviderDisabled(String provider) {}
-        public void onProviderEnabled(String provider) {}
-        public void onStatusChanged(String provider, int Status, Bundle extras) {}
-    };
-    private void updateWithNewLocation(Location l)
-    {
-        String latLongString = "Aucun Emplacement trouvé";
-
-        if(l != null)
-        {
-            double lat = l.getLatitude();
-            double lng = l.getLongitude();
-            double alt = l.getAltitude();
-
-            latLongString = "Latitude:" + lat + "\nLongitude:" +lng + "\nAltitude:" + alt;
-
-
-
-        }
-        txt_GpsLocation.setText( latLongString);
-
-    }
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Action de BoutonFaim Click                                                       \\\
+    ///------------------------------------------------------------------------------------------\\\
     public void BtnFaim_OnClick(View v)
     {
 
         DataContainer.getInstance().MessageToSend = "J'ai Faim!!  Message envoyé via FoodandDrink";
         Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
         startActivity(intent);
-
-
     }
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  fAction de BoutonSoifClick                                                       \\\
+    ///------------------------------------------------------------------------------------------\\\
     public void BtnSoif_OnClick(View v)
     {
 
             DataContainer.getInstance().MessageToSend = "J'ai Soif!!  Message envoyé via FoodandDrink";
             Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
             startActivity(intent);
-
-    }
-    public void ShowMessageBox(String Msg)
-    {
-        AlertDialog alertDialog;
-        alertDialog = new AlertDialog.Builder((Context)this).create();
-        alertDialog.setTitle("Info");
-        alertDialog.setMessage(Msg);
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDialog.show();
 
     }
 
