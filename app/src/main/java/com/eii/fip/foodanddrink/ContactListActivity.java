@@ -24,12 +24,20 @@ import java.util.List;
 
 public class ContactListActivity extends Activity {
 
-
+    //region Declarations
 
     private ListView listContact;
     private Button btnAnnul;
     private Button btnSave;
-    public List<String> CustomList;
+
+    private PreferenceManageur pPreferenceManager = PreferenceManageur.getInstance();
+
+    //private List<String> CustomList;
+
+
+    //endregion
+
+    //region Routine Android
 
 
     @Override
@@ -65,6 +73,10 @@ public class ContactListActivity extends Activity {
         super.onStart();
         LoadCheckedList();
     }
+
+    //endregion
+
+    //region Fonction de base
     private void LinkInterface()
     {
         listContact = (ListView) findViewById(R.id.listViewAllContact);
@@ -87,13 +99,14 @@ public class ContactListActivity extends Activity {
             @Override
             public void onClick(View view) {
                 SaveCustomList();
-                DataContainer.getInstance().CustomList = CustomList;
-                SaveCustomList();
-                DataContainer.getInstance().SaveDataContainer();
+                pPreferenceManager.SaveDataContainer();
                 finish();
             }
         });
     }
+
+    //endregion
+
     private void getContacts()
     {
 
@@ -128,13 +141,12 @@ public class ContactListActivity extends Activity {
     }
     private void LoadCheckedList()
     {
-        CustomList = DataContainer.getInstance().CustomList;
         int nbr = listContact.getAdapter().getCount();
 
         for (int i = 0; i < nbr; i++) {
-            if (CustomList != null) {
+            if (pPreferenceManager.CustomContactList != null) {
                 String temp2 = listContact.getItemAtPosition(i).toString();
-                if (CustomList.contains(temp2)) {
+                if (pPreferenceManager.CustomContactList.contains(temp2)) {
                     listContact.setItemChecked(i, true);
                 }
             }
@@ -143,10 +155,10 @@ public class ContactListActivity extends Activity {
     }
     private void SaveCustomList()
     {
-        CustomList = new ArrayList<String>();
+        pPreferenceManager.CustomContactList.clear();
         for (int i = 0; i < listContact.getCount(); i++) {
             if (listContact.isItemChecked(i)) {
-                CustomList.add(listContact.getItemAtPosition(i).toString());
+                pPreferenceManager.CustomContactList.add(listContact.getItemAtPosition(i).toString());
             }
         }
     }

@@ -26,9 +26,13 @@ public class SendSmsActivity extends Activity {
 
     private Button BtnChange;
     private Button BtnSendSMS;
+
+    private PreferenceManageur pPreferenceManager = PreferenceManageur.getInstance();
+
+
     private Intent intentContactList=null;
     private ListView ContactList;
-    public List<String> CustomList;
+    //public List<String> CustomList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,21 +69,21 @@ public class SendSmsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ContactList.setItemChecked(i,ContactList.isItemChecked(i));
-                 if(!DataContainer.getInstance().CustomListChecked.contains(ContactList.getItemAtPosition(i)))
+                 if(!pPreferenceManager.CustomContactListChecked.contains(ContactList.getItemAtPosition(i)))
                     {
                         if(ContactList.isItemChecked(i))
                         {
-                            DataContainer.getInstance().CustomListChecked.add(ContactList.getItemAtPosition(i).toString());
+                            pPreferenceManager.CustomContactListChecked.add(ContactList.getItemAtPosition(i).toString());
                         }
                     }
                 else
                     {
                         if(!ContactList.isItemChecked(i))
                         {
-                        DataContainer.getInstance().CustomListChecked.remove(ContactList.getItemAtPosition(i).toString());
+                            pPreferenceManager.CustomContactListChecked.remove(ContactList.getItemAtPosition(i).toString());
                         }
                 }
-                DataContainer.getInstance().SaveDataContainer();
+                pPreferenceManager.SaveDataContainer();
             }
         });
 
@@ -97,10 +101,10 @@ public class SendSmsActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if(DataContainer.getInstance().bDeviceIsPhone) {
-                    int temp = DataContainer.getInstance().CustomListChecked.size();
+                if(pPreferenceManager.getDeviceIsPhone()) {
+                    int temp = pPreferenceManager.CustomContactListChecked.size();
                     for (int i = 0; i < temp; i++) {
-                        sendSms(DataContainer.getInstance().MessageToSend, DataContainer.getInstance().CustomListChecked.get(i));
+                        sendSms(pPreferenceManager.MessageToSend, pPreferenceManager.CustomContactListChecked.get(i));
                     }
                     if (temp > 1)
                         ShowMessageBox("Messages envoyés");
@@ -124,17 +128,17 @@ public class SendSmsActivity extends Activity {
     protected void onResume()
     {
         super.onResume();
-        if(DataContainer.getInstance().CustomList!=null) {
-            CustomList = DataContainer.getInstance().CustomList;
+        if(pPreferenceManager.CustomContactList!=null) {
+           // CustomList = pPreferenceManager.CustomContactList;
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_checked, android.R.id.text1, CustomList);
+                    android.R.layout.simple_list_item_checked, android.R.id.text1, pPreferenceManager.CustomContactList);
             ContactList.setAdapter(adapter);
         }
-        if(DataContainer.getInstance().CustomListChecked!=null)
+        if(pPreferenceManager.CustomContactListChecked!=null)
         {
-            for(int i=0;i<CustomList.size();i++)
+            for(int i=0;i<pPreferenceManager.CustomContactList.size();i++)
             {
-                if(DataContainer.getInstance().CustomListChecked.contains(CustomList.get(i)))
+                if(pPreferenceManager.CustomContactListChecked.contains(pPreferenceManager.CustomContactList.get(i)))
                 {
                     ContactList.setItemChecked(i,true);
                 }

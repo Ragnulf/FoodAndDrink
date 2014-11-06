@@ -43,25 +43,28 @@ import java.util.prefs.Preferences;
 
 public class MainActivity extends Activity {
 
+
+    //region Declarations
     //Declaration des objets graphiques
     private Button btn_Faim;
     private Button btn_Soif;
     private Button btn_test1;
 
-    public static final String PREFS_NAME = "DataContainerPref";
 
-    ///Declaration du DataContainer
-    private DataContainer pDataContainer;
+    ///Declaration du Preference Manager
+    private PreferenceManageur pPrefrenceManager;
+    //endregion
 
+    //region Routine Android
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Initialisation du DataContainer
-        pDataContainer = DataContainer.getInstance();
-        pDataContainer.setSetting(getSharedPreferences(PREFS_NAME, 0));
-        pDataContainer.bDeviceIsPhone=IsDeviceSmartphone();
-        pDataContainer.LoadDataContainer();
+        pPrefrenceManager = PreferenceManageur.getInstance();
+        pPrefrenceManager.setSetting(getSharedPreferences(pPrefrenceManager.PREFS_NAME, 0));
+        pPrefrenceManager.setDeviceIsPhone(IsDeviceSmartphone());
+        pPrefrenceManager.LoadDataContainer();
         //Liaison de l'interface
         LinkInterface();
         //Creation de l'interface
@@ -75,7 +78,6 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -87,6 +89,11 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //endregion
+
+    //region Fonction de base
+
+
     ///------------------------------------------------------------------------------------------\\\
     /// Rôle :  Link les interfaceXML                                                            \\\
     ///------------------------------------------------------------------------------------------\\\
@@ -124,30 +131,33 @@ public class MainActivity extends Activity {
 
 
     }
+//endregion
 
-
+    //region ActionUI
     ///------------------------------------------------------------------------------------------\\\
     /// Rôle :  Action de BoutonFaim Click                                                       \\\
     ///------------------------------------------------------------------------------------------\\\
     public void BtnFaim_OnClick(View v)
     {
 
-        DataContainer.getInstance().MessageToSend = "J'ai Faim!!  Message envoyé via FoodandDrink";
+        pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageFaim();
         Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
         startActivity(intent);
     }
     ///------------------------------------------------------------------------------------------\\\
-    /// Rôle :  fAction de BoutonSoifClick                                                       \\\
+    /// Rôle :  Action de BoutonSoifClick                                                       \\\
     ///------------------------------------------------------------------------------------------\\\
     public void BtnSoif_OnClick(View v)
     {
 
-            DataContainer.getInstance().MessageToSend = "J'ai Soif!!  Message envoyé via FoodandDrink";
+            pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageSoif();
             Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
             startActivity(intent);
 
     }
+    //endregion
 
+    //region Methode Diverse
     private boolean IsDeviceSmartphone()
     {
         TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -158,5 +168,7 @@ public class MainActivity extends Activity {
         }
 
     }
+
+    //endregion
 
 }
