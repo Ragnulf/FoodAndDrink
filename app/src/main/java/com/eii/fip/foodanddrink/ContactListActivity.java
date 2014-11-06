@@ -1,9 +1,6 @@
 package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
-import android.app.LauncherActivity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,16 +22,10 @@ import java.util.List;
 public class ContactListActivity extends Activity {
 
     //region Declarations
-
     private ListView listContact;
     private Button btnAnnul;
     private Button btnSave;
-
     private PreferenceManageur pPreferenceManager = PreferenceManageur.getInstance();
-
-    //private List<String> CustomList;
-
-
     //endregion
 
     //region Routine Android

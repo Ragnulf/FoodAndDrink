@@ -1,11 +1,10 @@
 package com.eii.fip.foodanddrink;
 
 import android.content.SharedPreferences;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.prefs.Preferences;
+
 
 /**
  * Created by jonathan on 04/11/14.
@@ -21,7 +20,7 @@ public class PreferenceManageur {
     //Declaration de l'instance unique
     private static PreferenceManageur INSTANCE = new PreferenceManageur();
     //Liste des contacts
-    public List<String> CustomContactList =new ArrayList<String>();;
+    public List<String> CustomContactList =new ArrayList<String>();
     public List<String> CustomContactListChecked = new ArrayList<String>();
     //Propriétés
     public String MessageToSend = "";
@@ -49,16 +48,19 @@ public class PreferenceManageur {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("CustomList", getCustomContactListString());
         editor.putString("CustomListChecked",getCustomContactListCheckedString());
-        editor.commit();
+        editor.apply();
     }
     //endregion
 
     //region Getter/Setter de la custom contact liste
     public String  getCustomContactListString()
     {
+
+
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < CustomContactList.size(); i++) {
-            sb.append(CustomContactList.get(i)).append(";");
+        for(String item:CustomContactList )
+        {
+            sb.append(item).append(";");
         }
         return sb.toString();
     }
@@ -66,17 +68,19 @@ public class PreferenceManageur {
     {
         String[] list = str.split(";");
         CustomContactList.clear();
-        for (int i=0;i<list.length;i++)
+        for(String item:list)
         {
-            CustomContactList.add(list[i]);
+            CustomContactList.add(item);
         }
         Collections.sort(CustomContactList);
     }
     public String  getCustomContactListCheckedString()
     {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < CustomContactListChecked.size(); i++) {
-            sb.append(CustomContactListChecked.get(i)).append(";");
+        for(String item:CustomContactListChecked)
+        {
+            sb.append(item).append(";");
+
         }
         return sb.toString();
     }
