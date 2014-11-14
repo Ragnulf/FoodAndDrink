@@ -27,6 +27,11 @@ public class PreferenceManageur {
     private String MessageFaim="J'ai Faim!!  Message envoyé via FoodandDrink";
     private String MessageSoif="J'ai Soif!!  Message envoyé via FoodandDrink";
     private boolean bDeviceIsPhone = false;
+    //Position GPS
+    private String latitude;
+    private String longitude;
+
+
 
 
     //Declaration des preferences
@@ -100,12 +105,14 @@ public class PreferenceManageur {
     public String getMessageFaim(){return MessageFaim;}
     public String getMessageSoif(){return MessageSoif;}
     public boolean getDeviceIsPhone(){return bDeviceIsPhone;}
-
-
+    public String getLongitude(){return  longitude;}
+    public String getLatitude(){return  latitude;}
 
     public void setMessageFaim(String _Msg){MessageFaim=_Msg;}
     public void setMessageSoif(String _Msg){MessageSoif=_Msg;}
     public void setDeviceIsPhone(boolean _bool){bDeviceIsPhone=_bool;}
+    public void setLongitude(String _longitude){longitude=_longitude;}
+    public void setLatitude(String _latitude){latitude=_latitude;}
     //endregion
 
 

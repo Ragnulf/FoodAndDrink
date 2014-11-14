@@ -19,7 +19,8 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:id="@+id/LinearMainLayout"
-        android:focusable="false">
+        android:focusable="false"
+        android:weightSum="1">
 
         <Button
             android:layout_width="match_parent"
@@ -37,15 +38,12 @@
             android:layout_gravity="center_horizontal" />
 
 
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/TestButton1"
-            android:layout_gravity="right"
-            android:clickable="true"
-            android:visibility="invisible" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="En Attente de récuperation de votre position"
+            android:id="@+id/textView_Status" />
 
 
     </LinearLayout>

@@ -21,24 +21,19 @@
         android:focusable="false">
 
 
-    <TextView
-        android:layout_width="141dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Coordonnées GPS:"
-        android:id="@+id/txt_titre_coo_gps" />
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="xyz"
-        android:id="@+id/Txt_Local_GPS" />
+        android:text="Réponses trouvés:"
+        />
 
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="364dp"
+            android:layout_height="match_parent"
             android:id="@+id/listViewResult"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_gravity="center_horizontal"

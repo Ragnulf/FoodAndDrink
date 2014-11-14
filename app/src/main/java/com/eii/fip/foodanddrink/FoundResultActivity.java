@@ -42,24 +42,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class FoundResultActivity extends Activity {
 
-    public static Document loadXMLFromString(String xml) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
 
-        InputSource is = new InputSource(new StringReader(xml));
-
-        return builder.parse(is);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_result);
         LinkInterface();
-        //Reception de la position du GPS
-       GetGpsPosition();
-
-
     }
 
     @Override
@@ -115,73 +104,24 @@ public class FoundResultActivity extends Activity {
 
     }
 
-    ///------------------------------------------------------------------------------------------\\\
-    /// Rôle :  Recupere les coordonnées gps                                                     \\\
-    ///------------------------------------------------------------------------------------------\\\
-    public void GetGpsPosition() {
-        LocationManager locationManager;
-        String svcName = Context.LOCATION_SERVICE;
-        locationManager = (LocationManager) getSystemService(svcName);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        ;
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setSpeedRequired(false);
-        criteria.setCostAllowed(true);
 
 
-        String provider1 = locationManager.getBestProvider(criteria, true);
-        Location l = locationManager.getLastKnownLocation(provider1);
 
-        updateWithNewLocation(l);
+ //region Parsage
+ public static Document loadXMLFromString(String xml) throws Exception {
+     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+     DocumentBuilder builder = factory.newDocumentBuilder();
 
-        locationManager.requestLocationUpdates(provider1, 1000, 10, locationListener);
+     InputSource is = new InputSource(new StringReader(xml));
 
+     return builder.parse(is);
+ }
 
-    }
-
-    ///------------------------------------------------------------------------------------------\\\
-    /// Rôle :  Evenement d'ecoute de cangement de position                                      \\\
-    ///------------------------------------------------------------------------------------------\\\
-    private final LocationListener locationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            updateWithNewLocation(location);
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int Status, Bundle extras) {
-        }
-    };
-
-    ///------------------------------------------------------------------------------------------\\\
-    /// Rôle :  Update de la position                                                            \\\
-    ///------------------------------------------------------------------------------------------\\\
-    private void updateWithNewLocation(Location l) {
-        String latLongString = "Aucun Emplacement trouvé";
-
-        if (l != null) {
-            double lat = l.getLatitude();
-            double lng = l.getLongitude();
-            double alt = l.getAltitude();
-            latitude = String.valueOf(lat);
-            longitude = String.valueOf(lng);
-
-            latLongString = "Latitude:" + lat + "\nLongitude:" + lng + "\nAltitude:" + alt;
+    //endregion
 
 
-        }
-        AsyncTextViewChange.setTextInView(txt_GpsLocation, latLongString);
-        getinterest();
 
-    }
+
 
     private void getinterest() {
         final StringBuilder query = new StringBuilder();
