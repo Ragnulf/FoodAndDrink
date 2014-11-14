@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
     {
 
         pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageFaim();
-        Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
+        Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
         startActivity(intent);
     }
     ///------------------------------------------------------------------------------------------\\\

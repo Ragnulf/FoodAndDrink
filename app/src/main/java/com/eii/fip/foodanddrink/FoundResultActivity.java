@@ -2,10 +2,15 @@ package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
 import android.content.Context;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +36,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -42,13 +51,30 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class FoundResultActivity extends Activity {
 
+//region Declarations
 
+    ///------------------------------------------------------------------------------------------\\\
+    /// Données membres                                                                          \\\
+    ///------------------------------------------------------------------------------------------\\\
+    private ListView listViewResult;
+    private String provider;
+    private ArrayList<String> placeName ;
 
+    ///Declaration du Preference Manager
+    private PreferenceManageur pPrefrenceManager;
+    ArrayAdapter<String> adapterListResult;
+
+    //endregion
+
+    //region Routine Android
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_result);
+        pPrefrenceManager = PreferenceManageur.getInstance();
         LinkInterface();
+        ExecuteRequest Request=new ExecuteRequest();
+        Request.execute(buildRequest());
     }
 
     @Override
@@ -70,112 +96,90 @@ public class FoundResultActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    ///------------------------------------------------------------------------------------------\\\
-    /// Données membres                                                                          \\\
-    ///------------------------------------------------------------------------------------------\\\
-    private TextView txt_GpsLocation;
-    private ListView listView;
 
-    private String latitude;
-    private String longitude;
-    private String provider;
-    private final int radius = 2000;
-    private String type = "restaurant";
-    private final String APIKEY = "AIzaSyA5FW8wnYDr_D4ddJyVDcWnLAGhfx3ykP8";
-
-
-
-    private ArrayList<String> placeName ;
-
-
+//endregion
+    //region Fonction de base
 
     ///------------------------------------------------------------------------------------------\\\
     /// Rôle: Link l'interface                                                                   \\\
     ///------------------------------------------------------------------------------------------\\\
     private void LinkInterface() {
-        txt_GpsLocation = (TextView) findViewById(R.id.Txt_Local_GPS);
-        listView = (ListView) findViewById(R.id.listViewResult);
+
+        listViewResult = (ListView) findViewById(R.id.listViewResult);
         placeName = new ArrayList<String>();
-        listView = (ListView) findViewById(R.id.listViewResult);
+        listViewResult = (ListView) findViewById(R.id.listViewResult);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        adapterListResult = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, placeName);
-        listView.setAdapter(adapter);
+        listViewResult.setAdapter(adapterListResult);
 
     }
-
-
-
-
- //region Parsage
- public static Document loadXMLFromString(String xml) throws Exception {
-     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-     DocumentBuilder builder = factory.newDocumentBuilder();
-
-     InputSource is = new InputSource(new StringReader(xml));
-
-     return builder.parse(is);
- }
-
-    //endregion
-
-
-
-
-
-    private void getinterest() {
-        final StringBuilder query = new StringBuilder();
-
-        query.append("https://maps.googleapis.com/maps/api/place/nearbysearch/xml?");
-        query.append("location=" + latitude + "," + longitude + "&");
-        query.append("radius=" + radius + "&");
-        query.append("types=" + type + "&");
-        query.append("sensor=true&"); //Must be true if queried from a device with GPS
-        query.append("key=" + APIKEY);
-
-
-
-
-
-
-
-        new Thread(new Runnable() {
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Cree l'interface                                                                 \\\
+    ///------------------------------------------------------------------------------------------\\\
+    public void CreateInterface(){
+        listViewResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void run() {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpResponse response;
-                String responseString = null;
-                try {
-                    response = httpclient.execute(new HttpGet(query.toString()));
-                    StatusLine statusLine = response.getStatusLine();
-                    if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        response.getEntity().writeTo(out);
-                        out.close();
-                        responseString = out.toString();
-                        ParseResult(responseString);
-                    } else {
-                        //Closes the connection.
-                        response.getEntity().getContent().close();
-                        throw new IOException(statusLine.getReasonPhrase());
-                    }
-                } catch (ClientProtocolException e) {
-                    Log.e("ERROR", e.getMessage());
-                } catch (IOException e) {
-                    Log.e("ERROR", e.getMessage());
-                } /*catch (JSONException e) {
-                    Log.e("ERROR", e.getMessage());
-                }*/
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
             }
-        }).start();
+        });
 
     }
 
-    private void ParseResult(String result) {
+//endregion
+
+//region Recuperation des points d'interet
+
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Construit la requête                                                             \\\
+    ///------------------------------------------------------------------------------------------\\\
+    private String buildRequest(){
+        final StringBuilder query = new StringBuilder();
+        query.append("https://maps.googleapis.com/maps/api/place/nearbysearch/xml?");
+        query.append("location=" + pPrefrenceManager.getLatitude() + "," + pPrefrenceManager.getLongitude() + "&");
+        query.append("radius=" + pPrefrenceManager.getRadius() + "&");
+        query.append("types=" + pPrefrenceManager.getType() + "&");
+        query.append("sensor=true&"); //Must be true if queried from a device with GPS
+        query.append("key=" + pPrefrenceManager.GoogleAPIKEY);
+        return  query.toString();
+    }
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Envoi la requete                                                                 \\\
+    ///------------------------------------------------------------------------------------------\\
+    private ArrayList<Place> SendRequest(String Request){
+        HttpClient httpclient = new DefaultHttpClient();
+        ArrayList<Place> PlacesRes = null;
+        HttpResponse response;
+        String responseString = null;
         try {
+            response = httpclient.execute(new HttpGet(Request.toString()));
+            StatusLine statusLine = response.getStatusLine();
+            if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                response.getEntity().writeTo(out);
+                out.close();
+                responseString = out.toString();
+               PlacesRes= ParseResult(responseString);
+            } else {
+                //Closes the connection.
+                response.getEntity().getContent().close();
+                throw new IOException(statusLine.getReasonPhrase());
+            }
+        } catch (ClientProtocolException e) {
+            Log.e("ERROR", e.getMessage());
+        } catch (IOException e) {
+            Log.e("ERROR", e.getMessage());
+        }
+            return PlacesRes;
+    }
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Parse la reponse                                                                 \\\
+    ///------------------------------------------------------------------------------------------\\\
+    private ArrayList<Place> ParseResult(String result) {
+        ArrayList<Place> places = new ArrayList<Place>();
 
-            ArrayList<Place> places = new ArrayList<Place>();
-
+        try {
             Document xmlResult = loadXMLFromString(result);
             NodeList nodeList = xmlResult.getElementsByTagName("result");
             for (int i = 0, length = nodeList.getLength(); i < length; i++) {
@@ -215,21 +219,57 @@ public class FoundResultActivity extends Activity {
                 }
             }
 
-
-
-
-            for(Place item:places)
-            {
-                placeName.add(item.getName());
-            }
         }
             catch(Exception e){
                 Log.e("ERROR", e.getMessage());
             }
 
+        return places;
+        }
+    public static Document loadXMLFromString(String xml) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        InputSource is = new InputSource(new StringReader(xml));
+
+        return builder.parse(is);
+    }
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle : Tache Asynchrone                                                             \\\
+    ///------------------------------------------------------------------------------------------\\\
+    private class ExecuteRequest extends AsyncTask<String, Void, ArrayList<Place> >
+    {
+
+       @Override
+        protected ArrayList<Place> doInBackground(String... strings) {
+           return SendRequest(strings[0]);
+       }
+
+        @Override
+        protected void onPostExecute(ArrayList<Place> places) {
+            Collections.sort(places, new Comparator<Place>() {
+                public double compare(Place a, Place b) {
+                    return a.GetDistance() - b.GetDistance();
+
+                }
+            });
+            placeName.clear();
+            for(Place item:places)
+            {
+                double Distance =  item.GetDistance() ;
+                placeName.add(item.getName()+"\n"+item.getVicinity()+"\n Distance: "+String.valueOf(item.GetDistance())+" m");
+            }
+            //listViewResult.refreshDrawableState();
+            adapterListResult.notifyDataSetChanged();
 
         }
 
 
+    }
+
+
+
+
+//endregion
 
 }

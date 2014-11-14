@@ -30,7 +30,8 @@ public class PreferenceManageur {
     //Position GPS
     private String latitude;
     private String longitude;
-
+    private  int radius = 2000;
+    private String Type="restaurant";
 
 
 
@@ -107,12 +108,16 @@ public class PreferenceManageur {
     public boolean getDeviceIsPhone(){return bDeviceIsPhone;}
     public String getLongitude(){return  longitude;}
     public String getLatitude(){return  latitude;}
+    public int getRadius(){return radius;}
+    public String getType(){return Type;}
 
     public void setMessageFaim(String _Msg){MessageFaim=_Msg;}
     public void setMessageSoif(String _Msg){MessageSoif=_Msg;}
     public void setDeviceIsPhone(boolean _bool){bDeviceIsPhone=_bool;}
     public void setLongitude(String _longitude){longitude=_longitude;}
     public void setLatitude(String _latitude){latitude=_latitude;}
+    public void setRadius(int _radius){radius=_radius;}
+    public void setType(String _type){Type=_type;}
     //endregion
 
 
