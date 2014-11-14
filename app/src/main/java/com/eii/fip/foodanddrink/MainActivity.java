@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
     /// Rôle :  Action de BoutonFaim Click                                                       \\\
     ///------------------------------------------------------------------------------------------\\\
     public void BtnFaim_OnClick(View v)
-    {
+    {pPrefrenceManager.setType("restaurant");
 
         pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageFaim();
         Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
@@ -154,9 +154,9 @@ public class MainActivity extends Activity {
     ///------------------------------------------------------------------------------------------\\\
     public void BtnSoif_OnClick(View v)
     {
-
+            pPrefrenceManager.setType("bar");
             pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageSoif();
-            Intent intent = new Intent(MainActivity.this, SendSmsActivity.class);
+            Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
             startActivity(intent);
 
     }

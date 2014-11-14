@@ -38,6 +38,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_gravity="center_horizontal"
             tools:listitem="@android:layout/simple_list_item1"
+            android:clickable="true"
+
 
             />
 

@@ -24,8 +24,8 @@ public class PreferenceManageur {
     public List<String> CustomContactListChecked = new ArrayList<String>();
     //Propriétés
     public String MessageToSend = "";
-    private String MessageFaim="J'ai Faim!!  Message envoyé via FoodandDrink";
-    private String MessageSoif="J'ai Soif!!  Message envoyé via FoodandDrink";
+    private String MessageFaim="J'ai Faim!!";
+    private String MessageSoif="J'ai Soif!!";
     private boolean bDeviceIsPhone = false;
     //Position GPS
     private String latitude;
@@ -33,7 +33,9 @@ public class PreferenceManageur {
     private  int radius = 2000;
     private String Type="restaurant";
 
-
+//Message to send
+    public String AdresseToSend = null;
+    public String NameTosend = null;
 
     //Declaration des preferences
     private SharedPreferences settings;

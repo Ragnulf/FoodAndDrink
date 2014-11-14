@@ -90,7 +90,7 @@ public class Place{
         locationA.setLongitude( Double.valueOf(PreferenceManageur.getInstance().getLongitude()));
         Location locationB = new Location("B");
         locationB.setLatitude(geometry[0]);
-        locationB.setLongitude(geometry[0]);
+        locationB.setLongitude(geometry[1]);
         distance = locationA.distanceTo(locationB);
         return distance;
     }

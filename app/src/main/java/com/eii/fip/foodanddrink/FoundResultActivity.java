@@ -1,11 +1,14 @@
 package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -63,6 +66,7 @@ public class FoundResultActivity extends Activity {
     ///Declaration du Preference Manager
     private PreferenceManageur pPrefrenceManager;
     ArrayAdapter<String> adapterListResult;
+    ArrayList<Place> ListOfPlaces;
 
     //endregion
 
@@ -75,6 +79,7 @@ public class FoundResultActivity extends Activity {
         LinkInterface();
         ExecuteRequest Request=new ExecuteRequest();
         Request.execute(buildRequest());
+        CreateInterface();
     }
 
     @Override
@@ -121,6 +126,27 @@ public class FoundResultActivity extends Activity {
         listViewResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(l>0)
+                {
+                    pPrefrenceManager.AdresseToSend = ListOfPlaces.get(i).getVicinity();
+                    pPrefrenceManager.NameTosend = ListOfPlaces.get(i).getName();
+
+
+                    pPrefrenceManager.MessageToSend += "\nRetrouve moi chez:  "+pPrefrenceManager.NameTosend+" \n "+pPrefrenceManager.AdresseToSend;
+
+
+
+                    Intent intent = new Intent(FoundResultActivity.this, SendSmsActivity.class);
+                        startActivity(intent);
+
+
+
+                }
+
+
+
+
 
             }
         });
@@ -248,16 +274,17 @@ public class FoundResultActivity extends Activity {
         @Override
         protected void onPostExecute(ArrayList<Place> places) {
             Collections.sort(places, new Comparator<Place>() {
-                public double compare(Place a, Place b) {
-                    return a.GetDistance() - b.GetDistance();
+                public int compare(Place a, Place b) {
+                    return (int)(a.GetDistance() - b.GetDistance());
 
                 }
             });
+            ListOfPlaces = places;
             placeName.clear();
             for(Place item:places)
             {
                 double Distance =  item.GetDistance() ;
-                placeName.add(item.getName()+"\n"+item.getVicinity()+"\n Distance: "+String.valueOf(item.GetDistance())+" m");
+                placeName.add(item.getName()+"\n    "+item.getVicinity()+"\n    Distance: "+String.valueOf((int)item.GetDistance())+" m");
             }
             //listViewResult.refreshDrawableState();
             adapterListResult.notifyDataSetChanged();
@@ -271,5 +298,23 @@ public class FoundResultActivity extends Activity {
 
 
 //endregion
+
+    public void ShowMessageBox(String Msg)
+    {
+        AlertDialog alertDialog;
+        alertDialog = new AlertDialog.Builder((Context)this).create();
+        alertDialog.setTitle("Info");
+        alertDialog.setMessage(Msg);
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
+
+    }
+
+
 
 }
