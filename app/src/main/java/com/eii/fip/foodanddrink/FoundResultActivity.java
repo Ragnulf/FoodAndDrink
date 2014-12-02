@@ -133,7 +133,7 @@ public class FoundResultActivity extends Activity {
                     pPrefrenceManager.NameTosend = ListOfPlaces.get(i).getName();
 
 
-                    pPrefrenceManager.MessageToSend += "\nRetrouve moi chez:  "+pPrefrenceManager.NameTosend+" \n "+pPrefrenceManager.AdresseToSend;
+                    pPrefrenceManager.MessageToSend += " "+pPrefrenceManager.NameTosend+" \n "+pPrefrenceManager.AdresseToSend;
 
                     pPrefrenceManager.ActivityParent= FoundResultActivity.this;
 

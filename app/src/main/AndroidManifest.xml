@@ -29,11 +29,11 @@
         </activity>
         <activity
             android:name=".FoundResultActivity"
-            android:label="@string/title_activity_found_result" >
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".ConfigActivity"
-            android:label="@string/title_activity_config" >
+            android:label="@string/app_name" >
         </activity>
     </application>
 

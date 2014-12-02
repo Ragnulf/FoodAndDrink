@@ -68,6 +68,7 @@ public class MainActivity extends Activity {
         pPrefrenceManager.setSetting(getSharedPreferences(pPrefrenceManager.PREFS_NAME, 0));
         pPrefrenceManager.setDeviceIsPhone(IsDeviceSmartphone());
         pPrefrenceManager.LoadDataContainer();
+        pPrefrenceManager.LoadSettings();
         //Liaison de l'interface
         LinkInterface();
         //Creation de l'interface
@@ -80,7 +81,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
     @Override
@@ -104,7 +105,7 @@ public class MainActivity extends Activity {
     {
         btn_Faim = (Button)findViewById(R.id.Btn_Faim);
         btn_Soif= (Button)findViewById(R.id.Btn_Soif);
-        btn_Config = (Button)findViewById(R.id.action_settings);
+        btn_Config = (Button)findViewById(R.id.Btn_Config);
         txtView_Status = (TextView)findViewById(R.id.textView_Status);
         pPrefrenceManager.MainContext = (Context)this;
     }
@@ -126,12 +127,13 @@ public class MainActivity extends Activity {
             }
         });
 
-      /*  btn_Config.setOnClickListener(new Button.OnClickListener(){
+        btn_Config.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+                startActivity(intent);
             }
 
-            });*/
+            });
 
     }
 //endregion
@@ -141,7 +143,7 @@ public class MainActivity extends Activity {
     /// Rôle :  Action de BoutonFaim Click                                                       \\\
     ///------------------------------------------------------------------------------------------\\\
     public void BtnFaim_OnClick(View v)
-    {pPrefrenceManager.setType("restaurant");
+    {pPrefrenceManager.setType(pPrefrenceManager.TypeSearchFaim);
 
         pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageFaim();
         Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
@@ -152,7 +154,7 @@ public class MainActivity extends Activity {
     ///------------------------------------------------------------------------------------------\\\
     public void BtnSoif_OnClick(View v)
     {
-            pPrefrenceManager.setType("bar");
+            pPrefrenceManager.setType(pPrefrenceManager.TypeSearchSoif);
             pPrefrenceManager.MessageToSend = pPrefrenceManager.getMessageSoif();
             Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
             startActivity(intent);

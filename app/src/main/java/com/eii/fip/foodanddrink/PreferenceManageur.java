@@ -32,14 +32,17 @@ public class PreferenceManageur {
     public List<String> CustomContactListChecked = new ArrayList<String>();
     //Propriétés
     public String MessageToSend = "";
-    private String MessageFaim="J'ai Faim!!";
-    private String MessageSoif="J'ai Soif!!";
+    private String MessageFaim="J'ai Faim!! Retrouve moi chez:";
+    private String MessageSoif="J'ai Soif!! Retrouve moi chez ";
     private boolean bDeviceIsPhone = false;
     //Position GPS
     private String latitude;
     private String longitude;
     private  int radius = 2000;
     private String Type="restaurant";
+
+    public String TypeSearchFaim = "restaurant";
+    public String TypeSearchSoif = "bar";
 
 //Message to send
     public String AdresseToSend = null;
@@ -50,6 +53,26 @@ public class PreferenceManageur {
 
 
     //endregion
+    public void LoadSettings()
+    {
+        MessageFaim= settings.getString("MessageFaim","J'ai Faim!! Retrouve moi chez ");
+        MessageSoif = settings.getString("MessageSoif","J'ai Soif!! Retrouve moi chez ");
+        radius = settings.getInt("Radius",2000);
+        TypeSearchFaim=settings.getString("TypeSearchFaim","restaurant");
+        TypeSearchSoif=settings.getString("TypeSearchSoif","bar");
+    }
+    public void saveSettings()
+    {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("MessageFaim", MessageFaim);
+        editor.putString("MessageSoif", MessageSoif);
+        editor.putInt("Radius", radius);
+        editor.putString("TypeSearchFaim", TypeSearchFaim);
+        editor.putString("TypeSearchSoif", TypeSearchSoif);
+        editor.apply();
+    }
+
+
 
     //region Load/Save Preference
     public void   LoadDataContainer()

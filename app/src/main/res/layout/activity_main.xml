@@ -24,7 +24,7 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="175dp"
             android:text="New Button"
             android:id="@+id/Btn_Faim"
             android:layout_gravity="center_horizontal"
@@ -32,7 +32,7 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="177dp"
             android:text="New Button"
             android:id="@+id/Btn_Soif"
             android:layout_gravity="center_horizontal" />
@@ -40,10 +40,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="En Attente de récuperation de votre position"
-            android:id="@+id/textView_Status" />
+            android:id="@+id/textView_Status"
+            android:layout_weight="0.85" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Configuration"
+            android:id="@+id/Btn_Config" />
 
 
     </LinearLayout>
