@@ -127,7 +127,7 @@ public class FoundResultActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if(l>0)
+                if(l>=0)
                 {
                     pPrefrenceManager.AdresseToSend = ListOfPlaces.get(i).getVicinity();
                     pPrefrenceManager.NameTosend = ListOfPlaces.get(i).getName();
@@ -135,9 +135,10 @@ public class FoundResultActivity extends Activity {
 
                     pPrefrenceManager.MessageToSend += "\nRetrouve moi chez:  "+pPrefrenceManager.NameTosend+" \n "+pPrefrenceManager.AdresseToSend;
 
-
+                    pPrefrenceManager.ActivityParent= FoundResultActivity.this;
 
                     Intent intent = new Intent(FoundResultActivity.this, SendSmsActivity.class);
+
                         startActivity(intent);
 
 

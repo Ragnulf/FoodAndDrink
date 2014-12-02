@@ -8,5 +8,6 @@
     <string name="title_activity_action_send_sms">ActionSendSMS</string>
     <string name="title_activity_send_sms">SendSmsActivity</string>
     <string name="title_activity_found_result">FoundResultActivity</string>
+    <string name="title_activity_config">ConfigActivity</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,6 +42,7 @@ public class SendSmsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sms);
         LinkInterface();
+        pPreferenceManager.ActivityParent.finish();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -73,6 +76,7 @@ public class SendSmsActivity extends Activity {
                     {
                         if(ContactList.isItemChecked(i))
                         {
+                            if(ContactList.getItemAtPosition(i).toString().length()>1)
                             pPreferenceManager.CustomContactListChecked.add(ContactList.getItemAtPosition(i).toString());
                         }
                     }
@@ -104,13 +108,17 @@ public class SendSmsActivity extends Activity {
                 if(pPreferenceManager.getDeviceIsPhone()) {
                     int temp = pPreferenceManager.CustomContactListChecked.size();
                     for (int i = 0; i < temp; i++) {
-                        sendSms(pPreferenceManager.MessageToSend, pPreferenceManager.CustomContactListChecked.get(i));
+                        if(pPreferenceManager.CustomContactListChecked.get(i).length()>1) {
+                           sendSms(pPreferenceManager.MessageToSend, pPreferenceManager.CustomContactListChecked.get(i));
+                        }
                     }
                     if (temp > 1)
                         ShowMessageBox("Messages envoyés");
                     else if (temp == 1)
                         ShowMessageBox("Message envoyé");
                     else ;
+
+                   finish();
                 }
                 else
                 {
@@ -120,10 +128,9 @@ public class SendSmsActivity extends Activity {
         });
 
 
-
-
-
     }
+
+
     @Override
     protected void onResume()
     {
@@ -174,7 +181,24 @@ public class SendSmsActivity extends Activity {
 
             //Grâce à l'objet de gestion de SMS (SmsManager) que l'on récupère grâce à la méthode static getDefault()
             //On envoit le SMS à l'aide de la méthode sendTextMessage
-            SmsManager.getDefault().sendTextMessage(num, null, msg, null, null);
+            if(msg.length()>pPreferenceManager.maxMessageLength)
+            {
+
+                SmsManager sms = SmsManager.getDefault();
+
+                ArrayList<String> msgsplit=sms.divideMessage(msg);
+                ArrayList<PendingIntent> listOfIntents = new ArrayList<PendingIntent>();
+
+                for (int k=0; k < msgsplit.size(); k++){
+                    Intent sentIntent = new Intent();
+                    PendingIntent pi = PendingIntent.getBroadcast(SendSmsActivity.this, 0, sentIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    listOfIntents.add(pi);
+                }
+// sendMessage(contactNos[j],msgs[i]);
+                sms.sendMultipartTextMessage(num,null,msgsplit, listOfIntents, null);
+            }
+            else
+               SmsManager.getDefault().sendTextMessage(num, null, msg, null, null);
 
         }
         else{
@@ -186,8 +210,8 @@ public class SendSmsActivity extends Activity {
     public void ShowMessageBox(String Msg)
     {
         AlertDialog alertDialog;
-        alertDialog = new AlertDialog.Builder((Context)this).create();
-        alertDialog.setTitle("Info");
+        alertDialog = new AlertDialog.Builder((Context)pPreferenceManager.MainContext).create();
+        alertDialog.setTitle("Informations:");
         alertDialog.setMessage(Msg);
         alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
             @Override

@@ -1,5 +1,7 @@
 package com.eii.fip.foodanddrink;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +19,12 @@ public class PreferenceManageur {
     //Chaine statique
     public static final String PREFS_NAME = "FoodAndDrinkPrefence";
     public static String GoogleAPIKEY = "AIzaSyA5FW8wnYDr_D4ddJyVDcWnLAGhfx3ykP8";
+    public static int maxMessageLength = 50;
+
+
+    //Main Context
+    public Context MainContext;
+
     //Declaration de l'instance unique
     private static PreferenceManageur INSTANCE = new PreferenceManageur();
     //Liste des contacts
@@ -63,8 +71,6 @@ public class PreferenceManageur {
     //region Getter/Setter de la custom contact liste
     public String  getCustomContactListString()
     {
-
-
         StringBuilder sb = new StringBuilder();
         for(String item:CustomContactList )
         {
@@ -103,6 +109,8 @@ public class PreferenceManageur {
         Collections.sort(CustomContactListChecked);
     }
     //endregion
+    //Permet de stocker lepredecesseur
+    public Activity ActivityParent;
 
     //region Getter/Setter
     public String getMessageFaim(){return MessageFaim;}

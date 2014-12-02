@@ -4,6 +4,7 @@ package com.eii.fip.foodanddrink;
 import java.io.File;
 import java.io.FileOutputStream;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,7 +49,9 @@ public class MainActivity extends Activity {
     //Declaration des objets graphiques
     private Button btn_Faim;
     private Button btn_Soif;
+    private Button btn_Config;
     private TextView txtView_Status;
+
 
 
     ///Declaration du Preference Manager
@@ -101,8 +104,9 @@ public class MainActivity extends Activity {
     {
         btn_Faim = (Button)findViewById(R.id.Btn_Faim);
         btn_Soif= (Button)findViewById(R.id.Btn_Soif);
+        btn_Config = (Button)findViewById(R.id.action_settings);
         txtView_Status = (TextView)findViewById(R.id.textView_Status);
-
+        pPrefrenceManager.MainContext = (Context)this;
     }
     ///------------------------------------------------------------------------------------------\\\
     /// Rôle :  Cree l'interface                                                                 \\\
@@ -122,18 +126,12 @@ public class MainActivity extends Activity {
             }
         });
 
-
-
-      /*  btn_test1.setOnClickListener(new View.OnClickListener() {
-            @Override
+      /*  btn_Config.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FoundResultActivity.class);
-                startActivity(intent);
+
             }
-        });
-        btn_test1.setVisibility(View.VISIBLE);*/
 
-
+            });*/
 
     }
 //endregion
