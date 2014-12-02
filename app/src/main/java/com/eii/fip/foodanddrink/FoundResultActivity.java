@@ -54,7 +54,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class FoundResultActivity extends Activity {
 
-//region Declarations
+    //region Declarations
 
     ///------------------------------------------------------------------------------------------\\\
     /// Données membres                                                                          \\\
@@ -103,6 +103,7 @@ public class FoundResultActivity extends Activity {
 
 
 //endregion
+
     //region Fonction de base
 
     ///------------------------------------------------------------------------------------------\\\
@@ -141,14 +142,7 @@ public class FoundResultActivity extends Activity {
 
                         startActivity(intent);
 
-
-
                 }
-
-
-
-
-
             }
         });
 
@@ -156,7 +150,7 @@ public class FoundResultActivity extends Activity {
 
 //endregion
 
-//region Recuperation des points d'interet
+    //region Recuperation des points d'interet
 
     ///------------------------------------------------------------------------------------------\\\
     /// Rôle :  Construit la requête                                                             \\\

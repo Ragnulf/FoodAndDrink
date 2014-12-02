@@ -78,12 +78,6 @@ public class Place{
     public double GetDistance()
     {
 
-    /*    float[] ret=geometry;
-
-        Location.distanceBetween(Double.valueOf(),
-                Double.valueOf(PreferenceManageur.getInstance().getLongitude()),
-                geometry[0],geometry[1],ret);//locA.distanceBetween(locB);
-        return (int)ret[1];*/
         double distance = 0;
         Location locationA = new Location("A");
         locationA.setLatitude( Double.valueOf(PreferenceManageur.getInstance().getLatitude()));

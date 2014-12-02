@@ -1,3 +1,4 @@
+
 package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
@@ -50,7 +51,8 @@ public class PreferenceManageur {
 
     //Declaration des preferences
     private SharedPreferences settings;
-
+    //Permet de stocker lepredecesseur
+    public Activity ActivityParent;
 
     //endregion
     public void LoadSettings()
@@ -74,12 +76,35 @@ public class PreferenceManageur {
 
 
 
+    //region chargement des données de préférences
+    public void LoadSettings()
+    {
+        MessageFaim= settings.getString("MessageFaim","J'ai Faim!! Retrouve moi chez ");
+        MessageSoif = settings.getString("MessageSoif","J'ai Soif!! Retrouve moi chez ");
+        radius = settings.getInt("Radius",2000);
+        TypeSearchFaim=settings.getString("TypeSearchFaim","restaurant");
+        TypeSearchSoif=settings.getString("TypeSearchSoif","bar");
+    }
+    public void saveSettings()
+    {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("MessageFaim", MessageFaim);
+        editor.putString("MessageSoif", MessageSoif);
+        editor.putInt("Radius", radius);
+        editor.putString("TypeSearchFaim", TypeSearchFaim);
+        editor.putString("TypeSearchSoif", TypeSearchSoif);
+        editor.apply();
+    }
+//endregion
+
     //region Load/Save Preference
     public void   LoadDataContainer()
     {
         String str = settings.getString("CustomList","");
+        if(str.length()>1 )
         setCustomContactList(str);
         str = settings.getString("CustomListChecked","");
+        if(str.length()>1 )
         setCustomContactListChecked(str);
     }
     public void SaveDataContainer()
@@ -132,8 +157,6 @@ public class PreferenceManageur {
         Collections.sort(CustomContactListChecked);
     }
     //endregion
-    //Permet de stocker lepredecesseur
-    public Activity ActivityParent;
 
     //region Getter/Setter
     public String getMessageFaim(){return MessageFaim;}
@@ -152,8 +175,6 @@ public class PreferenceManageur {
     public void setRadius(int _radius){radius=_radius;}
     public void setType(String _type){Type=_type;}
     //endregion
-
-
 
     //region Methodes_de_construction
     public static PreferenceManageur getInstance()

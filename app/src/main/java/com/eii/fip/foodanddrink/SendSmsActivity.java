@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,21 +19,19 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class SendSmsActivity extends Activity {
 
+    //region Declaration
     private Button BtnChange;
     private Button BtnSendSMS;
-
     private PreferenceManageur pPreferenceManager = PreferenceManageur.getInstance();
-
-
     private Intent intentContactList=null;
     private ListView ContactList;
-    //public List<String> CustomList;
+//endregion
 
+    //region Routine Android
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,17 +48,32 @@ public class SendSmsActivity extends Activity {
         return true;
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    protected void onResume()
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        super.onResume();
+        if(pPreferenceManager.CustomContactList!=null) {
+            // CustomList = pPreferenceManager.CustomContactList;
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_checked, android.R.id.text1, pPreferenceManager.CustomContactList);
+            ContactList.setAdapter(adapter);
         }
-        return super.onOptionsItemSelected(item);
+        if(pPreferenceManager.CustomContactListChecked!=null&&pPreferenceManager.CustomContactList.size()>0)
+        {
+            for(int i=0;i<pPreferenceManager.CustomContactList.size();i++)
+            {
+                if(pPreferenceManager.CustomContactListChecked.contains(pPreferenceManager.CustomContactList.get(i)))
+                {
+                    ContactList.setItemChecked(i,true);
+                }
+
+            }
+
+        }
+
     }
+    //endregion
+
+    //region Fonction de base
     private void LinkInterface()
     {
         intentContactList = new Intent(SendSmsActivity.this, ContactListActivity.class);
@@ -130,31 +141,9 @@ public class SendSmsActivity extends Activity {
 
     }
 
+//endregion
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        if(pPreferenceManager.CustomContactList!=null) {
-           // CustomList = pPreferenceManager.CustomContactList;
-            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_checked, android.R.id.text1, pPreferenceManager.CustomContactList);
-            ContactList.setAdapter(adapter);
-        }
-        if(pPreferenceManager.CustomContactListChecked!=null)
-        {
-            for(int i=0;i<pPreferenceManager.CustomContactList.size();i++)
-            {
-                if(pPreferenceManager.CustomContactListChecked.contains(pPreferenceManager.CustomContactList.get(i)))
-                {
-                    ContactList.setItemChecked(i,true);
-                }
-
-            }
-
-        }
-
-    }
+    //region SendSMS
     private void sendSms(String msg,String Nom )
     {
         String num="";
@@ -206,7 +195,9 @@ public class SendSmsActivity extends Activity {
         }
 
     }
+    //endregion
 
+    //region Fonction générique
     public void ShowMessageBox(String Msg)
     {
         AlertDialog alertDialog;
@@ -223,5 +214,5 @@ public class SendSmsActivity extends Activity {
 
     }
 
-
+//endregion
 }

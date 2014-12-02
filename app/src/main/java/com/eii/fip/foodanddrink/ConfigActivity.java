@@ -1,7 +1,6 @@
 package com.eii.fip.foodanddrink;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -82,13 +81,7 @@ public class ConfigActivity extends Activity {
 
         btnSave.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View view) {
-                pPrefrenceManager.setMessageFaim(editMessageFaim.getText().toString());
-                pPrefrenceManager.setMessageSoif(editMessageSoif.getText().toString());
-                pPrefrenceManager.TypeSearchFaim = (editTypeSearchFaim.getText().toString());
-                pPrefrenceManager.TypeSearchSoif= (editTypeSearchSoif.getText().toString());
-                pPrefrenceManager.setRadius(Integer.valueOf(editradius.getText().toString()));
-                pPrefrenceManager.saveSettings();
-                finish();
+                saveFormPref();
             }
         });
         btnCancel.setOnClickListener(new Button.OnClickListener() {
@@ -99,7 +92,25 @@ public class ConfigActivity extends Activity {
 
 
     }
+    //endregion
+    //region Chargement/Sauvegarde
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Sauvegarde les données                                                           \\\
+    ///------------------------------------------------------------------------------------------\\\
+    private void saveFormPref()
+    {
+        pPrefrenceManager.setMessageFaim(editMessageFaim.getText().toString());
+        pPrefrenceManager.setMessageSoif(editMessageSoif.getText().toString());
+        pPrefrenceManager.TypeSearchFaim = (editTypeSearchFaim.getText().toString());
+        pPrefrenceManager.TypeSearchSoif= (editTypeSearchSoif.getText().toString());
+        pPrefrenceManager.setRadius(Integer.valueOf(editradius.getText().toString()));
+        pPrefrenceManager.saveSettings();
+        finish();
 
+    }
+    ///------------------------------------------------------------------------------------------\\\
+    /// Rôle :  Charge les données                                                               \\\
+    ///------------------------------------------------------------------------------------------\\\
     private void loadFormPref()
     {
         pPrefrenceManager.LoadSettings();
