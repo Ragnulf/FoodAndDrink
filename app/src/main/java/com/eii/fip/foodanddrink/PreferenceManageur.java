@@ -55,26 +55,6 @@ public class PreferenceManageur {
     public Activity ActivityParent;
 
     //endregion
-    public void LoadSettings()
-    {
-        MessageFaim= settings.getString("MessageFaim","J'ai Faim!! Retrouve moi chez ");
-        MessageSoif = settings.getString("MessageSoif","J'ai Soif!! Retrouve moi chez ");
-        radius = settings.getInt("Radius",2000);
-        TypeSearchFaim=settings.getString("TypeSearchFaim","restaurant");
-        TypeSearchSoif=settings.getString("TypeSearchSoif","bar");
-    }
-    public void saveSettings()
-    {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("MessageFaim", MessageFaim);
-        editor.putString("MessageSoif", MessageSoif);
-        editor.putInt("Radius", radius);
-        editor.putString("TypeSearchFaim", TypeSearchFaim);
-        editor.putString("TypeSearchSoif", TypeSearchSoif);
-        editor.apply();
-    }
-
-
 
     //region chargement des données de préférences
     public void LoadSettings()
